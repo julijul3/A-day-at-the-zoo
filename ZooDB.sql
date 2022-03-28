@@ -164,7 +164,13 @@ FROM enclosure
 NATURAL JOIN Zoo
 WHERE zoo_name = 'Copenhagen zoo' AND enclosure_size = (SELECT MIN(enclosure_size) FROM enclosure);
 
-
+# Find the name and average enclosure size for caretakers who are resposible for more than 2 enclosure types
+SELECT employee_name, AVG(enclosure_size) 
+FROM Employee
+NATURAL JOIN Enclosure
+WHERE employee_role = 'caretaker' 
+GROUP BY employee_name
+HAVING COUNT(zoo_id) > 2;
 
 
 
