@@ -1,5 +1,10 @@
 # A day at the zoo
 
+DROP DATABASE IF EXISTS ZooDB;
+CREATE DATABASE ZooDB;
+
+USE ZooDB;
+
 #drop tables
 
 DROP TABLE IF EXISTS zoo;
@@ -20,13 +25,22 @@ CREATE TABLE zoo
 	 PRIMARY KEY(zoo_ID)
 	);
     
+CREATE TABLE enclosure
+	(enclosure_ID	int,
+	 zoo_ID			int,
+	 enclosure_type	VARCHAR(10),
+	 size			double(7,2),
+	 PRIMARY KEY(enclosure_ID),
+     FOREIGN KEY(zoo_ID) REFERENCES zoo(zoo_ID)
+	);
+    
 CREATE TABLE specie
 	(specie_name	VARCHAR(15),
 	 enclosure_ID	int,
 	 PRIMARY KEY(specie_name),
      FOREIGN KEY(enclosure_ID) REFERENCES enclosure(enclosure_ID)
 	);
-    
+
 CREATE TABLE animal
 	(animal_ID		int,
 	 zoo_ID			int,
@@ -37,14 +51,8 @@ CREATE TABLE animal
      FOREIGN KEY(specie_name) REFERENCES specie(specie_name)
 	);
     
-CREATE TABLE enclosure
-	(enclosure_ID	int,
-	 zoo_ID			int,
-	 enclosure_type	VARCHAR(10),
-	 size			double(7,2),
-	 PRIMARY KEY(enclosure_ID),
-     FOREIGN KEY(zoo_ID) REFERENCES zoo(zoo_ID)
-	);
+
+    
     
 CREATE TABLE employee
 	(employee_ID	int,
@@ -53,6 +61,14 @@ CREATE TABLE employee
 	 employee_role			VARCHAR(10),
 	 PRIMARY KEY(employee_ID),
      FOREIGN KEY(zoo_ID) REFERENCES zoo(zoo_ID)
+	);
+    
+CREATE TABLE time_slot
+	(time_slot_ID	VARCHAR(2),
+	 week_day		VARCHAR(7),
+	 start_time		time,
+     end_time		time,
+	 PRIMARY KEY(time_slot_ID)
 	);
     
 CREATE TABLE shows
@@ -66,13 +82,6 @@ CREATE TABLE shows
      FOREIGN KEY(time_slot_ID) REFERENCES time_slot(time_slot_ID)
 	);
     
-CREATE TABLE time_slot
-	(time_slot_ID	VARCHAR(2),
-	 week_day		VARCHAR(7),
-	 start_time		time,
-     end_time		time,
-	 PRIMARY KEY(time_slot_ID)
-	);
     
 CREATE TABLE organizer
 	(employee_ID	int,
@@ -89,3 +98,7 @@ CREATE TABLE caretaker
      FOREIGN KEY(employee_ID) REFERENCES employee(employee_ID),
      FOREIGN KEY(enclosure_ID) REFERENCES enclosure(enclosure_ID)
 	);
+    
+CREATE VIEW Animals_IDs AS 
+SELECT animal_ID
+FROM animal;
