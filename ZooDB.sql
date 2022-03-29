@@ -177,7 +177,10 @@ WHERE employee_role = 'caretaker'
 GROUP BY employee_name
 HAVING COUNT(zoo_id) > 2;
 
-
+# Update timeslot 2A to a start time = 13:00:00 and an end time = 14:00:00
+UPDATE time_slot 
+SET start_time = '13:00', end_time = '14:00'
+WHERE time_slot_ID = '2A';
 
 
 
