@@ -158,11 +158,16 @@ INSERT caretaker VALUES(69,12);
 INSERT caretaker VALUES(42,21);
 INSERT caretaker VALUES(42,22);
 
+# All employees (ordered by ids)
+SELECT employee.employee_ID, employee.employee_name
+FROM employee
+ORDER BY employee_ID; 
+
 # Find the smallest enclosure type in Copenhagen Zoo
 SELECT enclosure_type as smallest_enclosure 
 FROM enclosure
 NATURAL JOIN Zoo
-WHERE zoo_name = 'Copenhagen zoo' AND enclosure_size = (SELECT MIN(enclosure_size) FROM enclosure);
+WHERE zoo_name = 'Copenhagen zoo' AND enclosure_size = (SELECT MIN(enclosure_size) FROM enclosure);#
 
 # Find the name and average enclosure size for caretakers who are resposible for more than 2 enclosure types
 SELECT employee_name, AVG(enclosure_size) 
@@ -171,6 +176,7 @@ NATURAL JOIN Enclosure
 WHERE employee_role = 'caretaker' 
 GROUP BY employee_name
 HAVING COUNT(zoo_id) > 2;
+
 
 
 
