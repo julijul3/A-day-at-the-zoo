@@ -58,5 +58,25 @@ DELIMITER ;
 
 CALL addShow(4, 21, 1, "2A", 28);
 
+SELECT * FROM organizer;
 
+# create trigger to refuse if caretaker has too many enclosure to be responsible for.
+
+DROP TRIGGER IF EXISTS beforeInsertCaretaker;
+DELIMITER //
+CREATE TRIGGER beforeInsertCaretaker BEFORE INSERT ON caretaker
+FOR EACH ROW
+BEGIN
+	IF (SELECT Count(*) FROM caretaker where employee_ID = NEW.employee_ID) >= 3
+    THEN SIGNAL SQLSTATE 'HY000'
+    SET MYSQL_ERRNO = 1525, 
+    MESSAGE_TEXT = 'An employee cannot have more than 3 enclosures under his responsibility';
+    END IF;
+END//
+DELIMITER ;
+
+INSERT enclosure(enclosure_ID, enclosure_type, enclosure_size, zoo_ID) VALUES (1, "ice", 200, 1); 
+INSERT caretaker(employee_ID, enclosure_ID) VALUES(69, 1);
+
+SELECT * from caretaker;
 
