@@ -80,3 +80,26 @@ INSERT caretaker(employee_ID, enclosure_ID) VALUES(69, 1);
 
 SELECT * from caretaker;
 
+# create event
+
+SET GLOBAL event_scheduler = 1;
+
+DROP TABLE IF EXISTS Messages;
+
+CREATE TABLE Messages (
+    TS timestamp,
+    Message VARCHAR(100)
+);
+
+DROP EVENT IF EXISTS Happyfeet_performance;
+
+CREATE EVENT Happyfeet_performance
+ON SCHEDULE EVERY 2 WEEK
+STARTS CURRENT_TIMESTAMP
+ENDS CURRENT_TIMESTAMP + INTERVAL 1 YEAR
+DO INSERT Messages VALUES (current_timestamp, 'The performance of "Happy Feet" by the penguins is coming up!');
+
+select * from Messages;
+
+SET GLOBAL event_scheduler = 0;
+
